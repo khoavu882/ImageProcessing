@@ -14,7 +14,27 @@ import java.awt.image.BufferedImage;
  */
 public class PhotoModulator {
 
-    public void setupTempMatrixNew(BufferedImage image, int[][] tempMatrix, int heightTemp, int widthTemp) { // Correctly
+    public static int maxValue(int[] array) {
+        int max = array[0];
+        for (int i = 1; i < 8; i++) {
+            if (array[i] > max) {
+                max = array[i];
+            }
+        }
+        return max;
+    }
+
+    public static int minValue(int[] array) {     //find min number
+        int min = array[0];
+        for (int i = 1; i < 8; i++) {
+            if (array[i] < min) {
+                min = array[i];
+            }
+        }
+        return min;
+    }
+
+    public static void setupTempMatrixNew(BufferedImage image, int[][] tempMatrix, int heightTemp, int widthTemp) { // Correctly
 
         int width = image.getWidth();
         int height = image.getHeight();
@@ -94,7 +114,7 @@ public class PhotoModulator {
 //        }
     }
 
-    public boolean checkFitSpeacial(int a, int b, int c, int d, int e, int f, int g, int h, int i) {
+    public static boolean checkFitSpeacial(int a, int b, int c, int d, int e, int f, int g, int h, int i) {
 
         boolean check = false;
         if (a == 255 && b == 255 && c == 255 && d == 255 && e == 255 && f == 255 && g == 255 && h == 255 && i == 255) {
@@ -103,5 +123,77 @@ public class PhotoModulator {
             check = false;
         }
         return check;
+    }
+
+    public static boolean checkFit(int a, int b, int c, int d, int e, int f, int g, int h, int i) {
+
+        boolean check = false;
+        if (b == 255 && d == 255 && f == 255 && h == 255 && i == 255) {
+            check = true;
+        }
+
+        if (a == 0 && b == 0 && c == 0 && d == 0 && e == 0 && f == 0 && g == 0 && h == 0 && i == 0) {
+            check = false;
+        }
+
+        if (b == 0 || d == 0 || f == 0 || h == 0 || i == 0) {
+            check = false;
+        }
+        return check;
+    }
+
+    /**
+     * **********************************************************************************
+     */
+    public static boolean checkHit(int a, int b, int c, int d, int e, int f, int g, int h, int i) {
+
+        boolean check = false;
+        if (b == 255 || d == 255 || f == 255 || h == 255 || i == 255) {
+            check = true;
+        }
+
+        if (a == 0 && b == 0 && c == 0 && d == 0 && e == 0 && f == 0 && g == 0 && h == 0 && i == 0) {
+            check = false;
+        }
+        return check;
+    }
+
+    /**
+     * **********************************************************************************
+     */
+    public static boolean checkHitSpeacial(int a, int b, int c, int d, int e, int f, int g, int h, int i) {
+
+        boolean check = false;
+        if (a == 255 || b == 255 || c == 255 || d == 255 || e == 255 || f == 255 || g == 255 || h == 255 || i == 255) {
+            check = true;
+        } else {
+            check = false;
+        }
+        return check;
+    }
+
+    public static int calculatorPrewittHorizontal(int a, int b, int c, int d, int e, int f, int g, int h, int i) {
+        int ret = 0;
+        ret = (-1) * a + (-1) * b + (-1) * c + 0 * d + 1 * e + 1 * f + 1 * g + 0 * h + 0 * i;
+        if (ret < 0) {
+            ret = 0;
+        }
+        if (ret > 255) {
+            ret = 255;
+        }
+        return ret;
+    }
+
+    public static int calculatorPrewittVertival(int a, int b, int c, int d, int e, int f, int g, int h, int i) {
+        
+        int ret = 0;
+        ret = (-1) * a + 0 * b + 1 * c + 1 * d + 1 * e + 0 * f + (-1) * g + (-1) * h + 0 * i;
+        if (ret < 0) {
+            ret = 0;
+        }
+        if (ret > 255) {
+            ret = 255;
+        }
+        return ret;
     }
 }

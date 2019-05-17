@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Histogram {
+
     public BufferedImage evaluateHistogram(BufferedImage img, BufferedImage img1, BufferedImage img2) {
         double[] arr = new double[256];
         double[] arr1 = new double[256];
@@ -64,23 +65,32 @@ public class Histogram {
             }
         }
         for (double x : arr) {
-            if (x != 0) num++;
+            if (x != 0) {
+                num++;
+            }
         }
         for (double x : arr1) {
-            if (x != 0) num1++;
+            if (x != 0) {
+                num1++;
+            }
         }
         for (double x : arr2) {
-            if (x != 0) num2++;
+            if (x != 0) {
+                num2++;
+            }
         }
         System.out.println("1-" + num);
         System.out.println("2-" + num1);
         System.out.println("3-" + num2);
-        if (num > num1 && num > num2)
+        if (num > num1 && num > num2) {
             return img;
-        if (num1 > num && num1 > num2)
+        }
+        if (num1 > num && num1 > num2) {
             return img1;
-        if (num2 > num && num2 > num1)
+        }
+        if (num2 > num && num2 > num1) {
             return img2;
+        }
         return null;
     }
 
@@ -88,7 +98,9 @@ public class Histogram {
         String a = add;
         int width;
         int height;
+        
         BufferedImage img = null;
+        
         int dem = 0;
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         try {
@@ -97,11 +109,15 @@ public class Histogram {
             System.out.println("Loading unsucessed!");
         }
         grayScale(img);
+        
         width = img.getWidth();
         height = img.getHeight();
+        
         BufferedImage tempimg = new BufferedImage(width, height, img.getType());
+        
         int totalPixel = width * height;
         double[] arr = new double[256];
+        
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 Color c = new Color(img.getRGB(j, i));
@@ -113,9 +129,11 @@ public class Histogram {
                 }
             }
         }
+        
         ArrayList<Integer> num = new ArrayList<>();
-        for (int k = 0; k < 256; k++)
+        for (int k = 0; k < 256; k++) {
             num.add(k);
+        }
         for (int k = 0; k < 256; k++) {
             dataset.setValue(arr[k], "Histogram", num.get(k));
         }
@@ -146,11 +164,15 @@ public class Histogram {
 
     public void histogramEqualization(BufferedImage img) {
         grayScale(img);
+        
         int width = img.getWidth();
         int height = img.getHeight();
+        
         BufferedImage tempimg = new BufferedImage(width, height, img.getType());
+        
         int totalPixel = width * height;
         int[] arr = new int[256];
+        
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 Color c = new Color(img.getRGB(j, i));
@@ -187,13 +209,19 @@ public class Histogram {
         int width;
         int height;
         int dem = 0;
+
         histogramEqualization(img);
+
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
         width = img.getWidth();
         height = img.getHeight();
+
         BufferedImage tempimg = new BufferedImage(width, height, img.getType());
+
         int totalPixel = width * height;
         double[] arr = new double[256];
+
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 Color c = new Color(img.getRGB(j, i));

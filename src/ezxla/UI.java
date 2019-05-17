@@ -6,6 +6,7 @@
 package ezxla;
 
 import com.sun.org.apache.xalan.internal.xsltc.dom.BitArray;
+import static ezxla.Histogram.grayScale;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -45,6 +46,8 @@ public class UI extends javax.swing.JFrame {
     Bitmap bit = new Bitmap();
     LogTrans log = new LogTrans();
     PowerLaw pow = new PowerLaw();
+    Max max = new Max();
+    Min min = new Min();
     GrayLevel gra = new GrayLevel();
     Median med = new Median();
     Sobel sob = new Sobel();
@@ -56,6 +59,8 @@ public class UI extends javax.swing.JFrame {
     EdgeDetection edge = new EdgeDetection();
     Boundary bou = new Boundary();
     Dilation dil = new Dilation();
+    Erosion ero = new Erosion();
+    Prewitt pre = new Prewitt();
 
     public UI() {
         initComponents();
@@ -108,6 +113,8 @@ public class UI extends javax.swing.JFrame {
         mnBitmap = new javax.swing.JMenuItem();
         powLaw = new javax.swing.JMenuItem();
         grayLevel = new javax.swing.JMenuItem();
+        drawMax = new javax.swing.JMenuItem();
+        drawMin = new javax.swing.JMenuItem();
         drawMedian = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         drawAveraging = new javax.swing.JMenuItem();
@@ -124,8 +131,10 @@ public class UI extends javax.swing.JFrame {
         drawLeft = new javax.swing.JMenuItem();
         drawRight = new javax.swing.JMenuItem();
         drawEdgeDetection = new javax.swing.JMenuItem();
+        drawEro = new javax.swing.JMenuItem();
         drawDilation = new javax.swing.JMenuItem();
         drawBoundary = new javax.swing.JMenuItem();
+        drawPrewitt = new javax.swing.JMenuItem();
 
         getParaBit.setMinimumSize(new java.awt.Dimension(341, 100));
         getParaBit.setSize(new java.awt.Dimension(400, 200));
@@ -438,6 +447,22 @@ public class UI extends javax.swing.JFrame {
         });
         jMenu3.add(grayLevel);
 
+        drawMax.setText("Maximum Filter");
+        drawMax.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                drawMaxActionPerformed(evt);
+            }
+        });
+        jMenu3.add(drawMax);
+
+        drawMin.setText("Minimum Filter");
+        drawMin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                drawMinActionPerformed(evt);
+            }
+        });
+        jMenu3.add(drawMin);
+
         drawMedian.setText("Median");
         drawMedian.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -554,6 +579,14 @@ public class UI extends javax.swing.JFrame {
         });
         jMenu3.add(drawEdgeDetection);
 
+        drawEro.setText("Erosion");
+        drawEro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                drawEroActionPerformed(evt);
+            }
+        });
+        jMenu3.add(drawEro);
+
         drawDilation.setText("Dilation");
         drawDilation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -569,6 +602,14 @@ public class UI extends javax.swing.JFrame {
             }
         });
         jMenu3.add(drawBoundary);
+
+        drawPrewitt.setText("Prewitt");
+        drawPrewitt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                drawPrewittActionPerformed(evt);
+            }
+        });
+        jMenu3.add(drawPrewitt);
 
         jMenuBar1.add(jMenu3);
 
@@ -990,6 +1031,70 @@ public class UI extends javax.swing.JFrame {
         readIamge1(img);
     }//GEN-LAST:event_drawDilationActionPerformed
 
+    private void drawMaxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_drawMaxActionPerformed
+        // TODO add your handling code here:
+        BufferedImage img = null;
+        String a = jUrl.getText();
+        try {
+            img = ImageIO.read(new File(a));
+        } catch (IOException ex) {
+            System.out.println("Load khong thanh cong");
+        }
+        
+        grayScale(img);
+
+        max.maxFilter(img);
+
+        readIamge1(img);
+    }//GEN-LAST:event_drawMaxActionPerformed
+
+    private void drawMinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_drawMinActionPerformed
+        // TODO add your handling code here:
+        BufferedImage img = null;
+        String a = jUrl.getText();
+        try {
+            img = ImageIO.read(new File(a));
+        } catch (IOException ex) {
+            System.out.println("Load khong thanh cong");
+        }
+
+        grayScale(img);
+        
+        min.minFilter(img);
+
+        readIamge1(img);
+    }//GEN-LAST:event_drawMinActionPerformed
+
+    private void drawEroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_drawEroActionPerformed
+        // TODO add your handling code here:
+        BufferedImage img = null;
+        String a = jUrl.getText();
+        try {
+            img = ImageIO.read(new File(a));
+        } catch (IOException ex) {
+            System.out.println("Load khong thanh cong");
+        }
+
+        ero.erosionFilter(img);
+
+        readIamge1(img);
+    }//GEN-LAST:event_drawEroActionPerformed
+
+    private void drawPrewittActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_drawPrewittActionPerformed
+        // TODO add your handling code here:
+        BufferedImage img = null;
+        String a = jUrl.getText();
+        try {
+            img = ImageIO.read(new File(a));
+        } catch (IOException ex) {
+            System.out.println("Load khong thanh cong");
+        }
+        
+        pre.prewittFilter(img);
+
+        readIamge1(img);
+    }//GEN-LAST:event_drawPrewittActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1127,12 +1232,16 @@ public class UI extends javax.swing.JFrame {
     private javax.swing.JMenuItem drawBoundary;
     private javax.swing.JMenuItem drawDilation;
     private javax.swing.JMenuItem drawEdgeDetection;
+    private javax.swing.JMenuItem drawEro;
     private javax.swing.JMenuItem drawHorizontal;
     private javax.swing.JMenuItem drawLaplacian;
     private javax.swing.JMenuItem drawLeft;
     private javax.swing.JMenuItem drawLog;
+    private javax.swing.JMenuItem drawMax;
     private javax.swing.JMenuItem drawMedian;
+    private javax.swing.JMenuItem drawMin;
     private javax.swing.JMenuItem drawPointDetection;
+    private javax.swing.JMenuItem drawPrewitt;
     private javax.swing.JMenuItem drawRep;
     private javax.swing.JMenuItem drawRight;
     private javax.swing.JMenuItem drawSobel;

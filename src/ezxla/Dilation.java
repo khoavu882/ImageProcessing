@@ -8,6 +8,8 @@ package ezxla;
 import static ezxla.Duplicate.colorToRGB;
 import static ezxla.Histogram.grayScale;
 import static ezxla.LineDetection.getGrayScale;
+import static ezxla.PhotoModulator.checkHit;
+import static ezxla.PhotoModulator.setupTempMatrixNew;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
@@ -56,8 +58,8 @@ public class Dilation {
         int heightTemp = height + 2;
         int widthTemp = width + 2;
         tempMatrix = new int[heightTemp][widthTemp];
-        PhotoModulator photoModulator = new PhotoModulator();
-        photoModulator.setupTempMatrixNew(resultImage, tempMatrix, heightTemp, widthTemp);
+        
+        setupTempMatrixNew(resultImage, tempMatrix, heightTemp, widthTemp);
 
         for (int y = 1; y < (heightTemp - 1); y++) {
             for (int x = 1; x < (widthTemp - 1); x++) {
@@ -73,9 +75,9 @@ public class Dilation {
                 int F = tempMatrix[y + 1][x];
                 int G = tempMatrix[y + 1][x - 1];
                 int H = tempMatrix[y][x - 1];
-                int center = tempMatrix[y][x];
+                int pointCenter = tempMatrix[y][x];
 
-                boolean check = checkHit(A, B, C, D, E, F, G, H, center);
+                boolean check = checkHit(A, B, C, D, E, F, G, H, pointCenter);
                 if (check == true) {
                     newPixel = colorToRGB(alpha, 255, 255, 255);
                     img.setRGB(x - 1, y - 1, newPixel);
@@ -151,64 +153,5 @@ public class Dilation {
 //        }
 //    }
 
-    public boolean checkFit(int a, int b, int c, int d, int e, int f, int g, int h, int i) {
-
-        boolean check = false;
-        if (b == 255 && d == 255 && f == 255 && h == 255 && i == 255) {
-            check = true;
-        }
-
-        if (a == 0 && b == 0 && c == 0 && d == 0 && e == 0 && f == 0 && g == 0 && h == 0 && i == 0) {
-            check = false;
-        }
-
-        if (b == 0 || d == 0 || f == 0 || h == 0 || i == 0) {
-            check = false;
-        }
-        return check;
-    }
-
-    /**
-     * **********************************************************************************
-     */
-    public boolean checkHit(int a, int b, int c, int d, int e, int f, int g, int h, int i) {
-
-        boolean check = false;
-        if (b == 255 || d == 255 || f == 255 || h == 255 || i == 255) {
-            check = true;
-        }
-
-        if (a == 0 && b == 0 && c == 0 && d == 0 && e == 0 && f == 0 && g == 0 && h == 0 && i == 0) {
-            check = false;
-        }
-        return check;
-    }
-
-    /**
-     * **********************************************************************************
-     */
-    public boolean checkFitSpeacial(int a, int b, int c, int d, int e, int f, int g, int h, int i) {
-
-        boolean check = false;
-        if (a == 255 && b == 255 && c == 255 && d == 255 && e == 255 && f == 255 && g == 255 && h == 255 && i == 255) {
-            check = true;
-        } else {
-            check = false;
-        }
-        return check;
-    }
-
-    /**
-     * **********************************************************************************
-     */
-    public boolean checkHitSpeacial(int a, int b, int c, int d, int e, int f, int g, int h, int i) {
-
-        boolean check = false;
-        if (a == 255 || b == 255 || c == 255 || d == 255 || e == 255 || f == 255 || g == 255 || h == 255 || i == 255) {
-            check = true;
-        } else {
-            check = false;
-        }
-        return check;
-    }
+    
 }

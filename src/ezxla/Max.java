@@ -5,6 +5,8 @@
  */
 package ezxla;
 
+import static ezxla.Duplicate.colorToRGB;
+import static ezxla.PhotoModulator.maxValue;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
@@ -13,40 +15,33 @@ import java.awt.image.BufferedImage;
  * @author maxiu
  */
 public class Max {
-    public void maxFilter(BufferedImage img, int boderColor, int numOfMatrix) {
+
+    public void maxFilter(BufferedImage img) { // image is < grayImageConverted >
+
         int width = img.getWidth();
         int height = img.getHeight();
-        Color color;
-        for (int row = numOfMatrix / 2; row < height - (numOfMatrix / 2); row++) {
-            for (int col = numOfMatrix / 2; col < width - (numOfMatrix / 2); col++) {
-                int max = 0;
-                for (int row1 = row - (numOfMatrix / 2); row1 <= row + (numOfMatrix / 2); row1++) {
-                    for (int col1 = col - (numOfMatrix / 2); col1 <= col + (numOfMatrix / 2); col1++) {
-                        color = new Color(img.getRGB(col1, row1));
-                        if (color.getRed() > max) {
-                            max = color.getRed();
-                        }
-                    }
-                }
+        int alpha;
+        int newPixel = 0;
 
-                Color newColor = new Color(max, max, max);
-                img.setRGB(col, row, newColor.getRGB());
+        for (int y = 1; y < (height - 1); y++) {
+            for (int x = 1; x < (width - 1); x++) {
+                alpha = new Color(img.getRGB(x, y)).getAlpha();
+                /*-------------------------------------------------*/
+                // TODO : Now get value of Color (take RED) neighbourhood of (x,y)
+                int A = new Color(img.getRGB(x - 1, y - 1)).getRed();
+                int B = new Color(img.getRGB(x, y - 1)).getRed();
+                int C = new Color(img.getRGB(x + 1, y - 1)).getRed();
+                int D = new Color(img.getRGB(x + 1, y)).getRed();
+                int E = new Color(img.getRGB(x + 1, y + 1)).getRed();
+                int F = new Color(img.getRGB(x, y + 1)).getRed();
+                int G = new Color(img.getRGB(x - 1, y - 1)).getRed();
+                int H = new Color(img.getRGB(x - 1, y)).getRed();
+                int pointCenter = new Color(img.getRGB(x, y)).getRed();
 
-            }
-        }
-        Color newColor = new Color(boderColor, boderColor, boderColor);
-        for (int i = 0; i < numOfMatrix / 2; i++) {
-
-            for (int row = 0; row < height; row++) {
-                if (row == 0 + i || row == width - 1 - i) {
-                    for (int col = 0; col < width; col++) {
-
-                        img.setRGB(col, row, newColor.getRGB());
-                    }
-                } else {
-                    img.setRGB(i, row, newColor.getRGB());
-                    img.setRGB(width - 1 - i, row, newColor.getRGB());
-                }
+                int[] array = {pointCenter, A, B, C, D, E, F, G, H};
+                int max = maxValue(array);
+                newPixel = colorToRGB(alpha, max, max, max);
+                img.setRGB(x, y, newPixel);
             }
         }
     }
